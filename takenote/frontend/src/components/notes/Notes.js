@@ -20,8 +20,21 @@ export class Notes extends Component {
   render() {
     return (
       <Fragment>
-        <h2>Notes</h2>
-        <table className="table table-striped">
+        <h4>Your saved notes</h4>
+        <table className="table table-bordered table-hover">
+          <tbody>
+            { this.props.notes.map(note => (
+              <tr key={note.id} className={note.private_flag ? "private-note": "public-note"}>
+                <td>
+                  <span className=""><b>{note.name}</b></span>
+                  <span className="float-end"><button onClick={this.props.deleteNote.bind(this, note.id)} className="btn btn-danger btn-sm">X</button></span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* <table className="table table-striped">
           <thead>
             <tr>
               <th>ID</th>
@@ -36,13 +49,13 @@ export class Notes extends Component {
               <tr key={note.id}>
                 <td>{note.id}</td>
                 <td>{note.name}</td>
-                <td>{note.private}</td>
+                <td>{note.private_flag}</td>
                 <td>{note.created_at}</td>
                 <td><button onClick={this.props.deleteNote.bind(this, note.id)} className="btn btn-danger btn-sm">Delete</button></td>
               </tr>
             ))}
           </tbody>
-        </table>
+        </table> */}
       </Fragment>
     )
   }

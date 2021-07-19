@@ -27,24 +27,32 @@ export class Form extends Component {
   };
 
   onChange = e => this.setState({ [e.target.name]: e.target.value});
-  onSubmit = e => {
+
+  resetState = () => {
+    this.setState({
+        name: "",
+        private_flag: "",
+        note: ""
+      });
+  };
+
+  onSubmit = (e) => {
     e.preventDefault();
     const { name, private_flag, note } = this.state;
-    const note_payload = { name:name, private:private_flag===""?"False":"True", notes:note };
+    const note_payload = { name:name, private_flag:private_flag==="checked"?"False":"True", notes:note };
     this.props.addNote(note_payload);
-
-
-  }
-
+    this.setState({name: '', private_flag: '',note: ''});
+  };
+  
 
   render() {
     const { name, private_flag, note} = this.state;
     return (
       <div className="card card-body mt-4 mb-4">
-        <h2>Take a new note!</h2>
+        <h2>Take a new note</h2>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
-          <span className="input-group-text">Name:</span>
+          <span className="input-group-text">Give this note a name:</span>
             <input 
               id="name" 
               type="text" 
@@ -55,8 +63,9 @@ export class Form extends Component {
               // value={this.name === undefined ? this.getCurrentDate() + " // " : this.name }
             />
           </div>
-          <div className="form-check">
-            <label className="form-check-label" htmlFor="private_flag">Keep this note PRIVATE!</label>
+            <p>{this.private_flag}</p>
+          <div className="form-check py-2">
+            <label className="form-check-label text-warning" htmlFor="private_flag"><b>Keep this note PRIVATE!</b></label>
             <input 
               id="private_flag" 
               type="checkbox" 
@@ -67,7 +76,7 @@ export class Form extends Component {
             />
           </div>
           <div className="form-group">
-            <span className="input-group-text">Note:</span>
+            <span className="input-group-text">What do you want to jot down? (Markdown encouraged)</span>
             <textarea 
               id="note" 
               name="note" 
@@ -77,8 +86,9 @@ export class Form extends Component {
               rows="10"
               value={this.note}></textarea>
           </div>
-          <div className="form-group">
-            <button type="submit" className="btn btn-primary">Submit</button>
+          <div className="form-group pt-3">
+            <button type="submit" className="btn btn-primary">Save this note for later, my dude!</button>
+            <button type="reset" onClick={this.resetState} className="btn btn-primary">Reset</button>
           </div>
         </form>
       </div>

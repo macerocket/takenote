@@ -9,8 +9,9 @@ class Note(models.Model):
 
     name = models.CharField(max_length=255, unique=True)
     notes = models.TextField()
-    private = models.BooleanField(default=False)
+    private_flag = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.name}, private={self.private}, created: {self.created_at}"
@@ -31,6 +32,7 @@ class ActionItem(models.Model):
     done = models.BooleanField(default=False)
     due_by = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.note. name} :: action={self.item}, who: {self.who}"

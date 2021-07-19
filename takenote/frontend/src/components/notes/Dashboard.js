@@ -6,8 +6,8 @@ import Notes from './Notes';
 export default function Dashboard() {
   return (
     <Fragment>
-      <Form />
-      <Notes />
+      <div className="col-3"><Notes /></div>
+      <div className="col-9"><Form /></div>
     </Fragment>
   )
 }

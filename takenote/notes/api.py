@@ -4,7 +4,7 @@ from .serializers import NoteSerializer, ActionItemSerializer
 
 
 class NoteViewSet(viewsets.ModelViewSet):
-    queryset = Note.objects.all()
+    queryset = Note.objects.all().order_by("-updated_at")
     permission_classes = [permissions.AllowAny]
     serializer_class = NoteSerializer
 

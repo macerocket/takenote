@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { GET_NOTES, DELETE_NOTE, ADD_NOTE } from './types';
+import { createMessage } from './messages';
+
+import { GET_NOTES, DELETE_NOTE, ADD_NOTE, GET_ERRORS } from './types';
 
 // Get notes
 export const getNotes = () => dispatch => {
@@ -17,6 +19,7 @@ export const getNotes = () => dispatch => {
 export const deleteNote = (id) => dispatch => {
   axios.delete(`/api/notes/${id}/`)
     .then(res => {
+      dispatch(createMessage({ deleteNote: "Note deleted" }));
       dispatch({
         type: DELETE_NOTE,
         payload: id
@@ -29,10 +32,21 @@ export const deleteNote = (id) => dispatch => {
 export const addNote = note => dispatch => {
   axios.post(`/api/notes/`, note)
     .then(res => {
+      dispatch(createMessage({ addNote: "Note added" }));
       dispatch({
         type: ADD_NOTE,
         payload: res.data
       });
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const errors = {
+        msg: err.response.data,
+        status: err.response.status
+      }
+      dispatch({
+        type: GET_ERRORS,
+        payload: errors
+      })
+
+    });
 };
