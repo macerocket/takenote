@@ -6,6 +6,15 @@ import { addNote } from '../../actions/notes';
 
 export class Form extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      private_flag: "",
+      note: ""
+    }
+  };
+
   getCurrentDate = (separator='') => {
 
     let newDate = new Date()
@@ -15,33 +24,35 @@ export class Form extends Component {
     
     return `${year}${separator}${month<10?`0${month}`:`${month}`}${separator}${date}`
   }
-  
-  state = { 
-    name: "",
-    private_flag: "",
-    note: ""
-  }
 
   static propTypes = {
     addNote: PropTypes.func.isRequired
   };
 
-  onChange = e => this.setState({ [e.target.name]: e.target.value});
+  onChange = (e) => this.setState({ [e.target.name]: e.target.value});
+
+  resetStateClick = (e) => {
+    e.preventDefault();
+    this.resetState();
+  };
 
   resetState = () => {
+    console.log("resetting state name = " + this.getCurrentDate() + " // ");
     this.setState({
-        name: "",
-        private_flag: "",
-        note: ""
-      });
-  };
+      name: this.getCurrentDate() + " // ", 
+      private_flag: "", 
+      note: ""
+    });
+    this.forceUpdate();
+
+  }
 
   onSubmit = (e) => {
     e.preventDefault();
     const { name, private_flag, note } = this.state;
     const note_payload = { name:name, private_flag:private_flag==="checked"?"False":"True", notes:note };
     this.props.addNote(note_payload);
-    this.setState({name: '', private_flag: '',note: ''});
+    this.resetState();
   };
   
 
@@ -59,7 +70,7 @@ export class Form extends Component {
               name="name"
               className="form-control"
               onChange={this.onChange}
-              value={this.name}
+              value={name}
               // value={this.name === undefined ? this.getCurrentDate() + " // " : this.name }
             />
           </div>
@@ -72,7 +83,7 @@ export class Form extends Component {
               name="private_flag"
               className="form-check-input"
               onChange={this.onChange}
-              value={this.private_flag}
+              value={private_flag}
             />
           </div>
           <div className="form-group">
@@ -84,11 +95,11 @@ export class Form extends Component {
               onChange={this.onChange}
               cols="50" 
               rows="10"
-              value={this.note}></textarea>
+              value={note}></textarea>
           </div>
           <div className="form-group pt-3">
             <button type="submit" className="btn btn-primary">Save this note for later, my dude!</button>
-            <button type="reset" onClick={this.resetState} className="btn btn-primary">Reset</button>
+            <button onClick={this.resetStateClick} className="btn btn-warning float-end">Reset this form</button>
           </div>
         </form>
       </div>
